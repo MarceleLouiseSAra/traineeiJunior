@@ -19,74 +19,78 @@ function verificaEntradaNumerica() {
   return;
 }
 
-while (1) {
-  console.log("\nPara adicionar um produto, digite '1'.");
-  console.log("Para remover um produto, digite '2'.");
-  console.log("Para listar os produtos, digite '3'.");
-  console.log("Para ver o valor total do estoque, digite '4'.");
-  console.log("Para ver o peso total do estoque, digite '5'.");
-  console.log(
-    "Para ver a média total do valor dos produtos no estoque, digite '6'.",
-  );
-  console.log(
-    "Para ver a média total do peso dos produtos no estoque, digite '7'.",
-  );
-  console.log(
-    "Para ver a quantidade total de produtos em estoque, digite '8'.",
-  );
-  console.log("Para finalizar, digite '9'.");
-
-  // let opcao: number;
-  var modo = prompt("\nDigite o modo desejado: ");
-
-  if (modo === "1") {
-    const _nome = prompt("Digite o nome do produto: ");
-    const _peso = Number(prompt("Digite o peso do produto: "));
-    const _valor = Number(prompt("Digite o valor do produto: "));
-    const _quantidade = Number(prompt("Digite a quantidade do produto: "));
-
-    const item = {
-      nome: _nome,
-      peso: _peso,
-      valor: _valor,
-      quantidade: _quantidade,
-    } as Item;
-
-    adicionarProduto(item);
-  }
-
-  if (modo == "2") {
-    const _nomeDoProduto = prompt(
-      "Digite o nome do produto que desejas remover do estoque: ",
+async function main() {
+  while (1) {
+    console.log("\nPara adicionar um produto, digite '1'.");
+    console.log("Para remover um produto, digite '2'.");
+    console.log("Para listar os produtos, digite '3'.");
+    console.log("Para ver o valor total do estoque, digite '4'.");
+    console.log("Para ver o peso total do estoque, digite '5'.");
+    console.log(
+      "Para ver a média total do valor dos produtos no estoque, digite '6'.",
     );
-    removerProduto(_nomeDoProduto);
-  }
+    console.log(
+      "Para ver a média total do peso dos produtos no estoque, digite '7'.",
+    );
+    console.log(
+      "Para ver a quantidade total de produtos em estoque, digite '8'.",
+    );
+    console.log("Para finalizar, digite '9'.");
 
-  if (modo == "3") {
-    listarProdutos();
-  }
+    // let opcao: number;
+    var modo = prompt("\nDigite o modo desejado: ");
 
-  if (modo == "4") {
-    verValorTotal();
-  }
+    if (modo === "1") {
+      const _nome = prompt("Digite o nome do produto: ");
+      const _peso = Number(prompt("Digite o peso do produto: "));
+      const _valor = Number(prompt("Digite o valor do produto: "));
+      const _quantidade = Number(prompt("Digite a quantidade do produto: "));
 
-  if (modo == "5") {
-    verPesoTotal();
-  }
+      const item = {
+        nome: _nome,
+        peso: _peso,
+        valor: _valor,
+        quantidade: _quantidade,
+      } as Item;
 
-  if (modo == "6") {
-    verMediaValor();
-  }
+      await adicionarProduto(item);
+    }
 
-  if (modo == "7") {
-    verMediaPeso();
-  }
+    if (modo == "2") {
+      const _nomeDoProduto = prompt(
+        "Digite o nome do produto que desejas remover do estoque: ",
+      );
+      await removerProduto(_nomeDoProduto);
+    }
 
-  if (modo == "8") {
-    verQuantidadeTotal();
-  }
+    if (modo == "3") {
+      await listarProdutos();
+    }
 
-  if (modo == "9") {
-    break;
+    if (modo == "4") {
+      await verValorTotal();
+    }
+
+    if (modo == "5") {
+      await verPesoTotal();
+    }
+
+    if (modo == "6") {
+      await verMediaValor();
+    }
+
+    if (modo == "7") {
+      await verMediaPeso();
+    }
+
+    if (modo == "8") {
+      await verQuantidadeTotal();
+    }
+
+    if (modo == "9") {
+      break;
+    }
   }
 }
+
+main();

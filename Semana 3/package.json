@@ -3,10 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "csv-parser": "^3.0.0",
-    "csv-writer": "^1.6.0",
     "minimist": "^1.2.8",
-    "prompt-sync": "^4.2.0",
     "undici-types": "^6.20.0"
   },
   "scripts": {
@@ -15,5 +12,12 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "csv-parser": "^3.1.0",
+    "csv-writer": "^1.6.0",
+    "prompt-sync": "^4.2.0",
+    "typescript": "^5.7.2"
+  }
 }
