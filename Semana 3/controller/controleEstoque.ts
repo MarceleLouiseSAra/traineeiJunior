@@ -8,7 +8,7 @@ export async function adicionarProduto(item: Item) {
     await estoqueService.criarItem(item);
     console.log("\nItem adicionado com sucesso!");
   } catch (error) {
-    console.log("\nErro ao adicionar produto ao estoque.");
+    console.log("\nErro ao adicionar produto ao estoque: ", error.message);
   }
 }
 
@@ -17,7 +17,7 @@ export async function removerProduto(nomeDoProduto: string) {
     await estoqueService.removerItem(nomeDoProduto);
     console.log("\nProduto removido com sucesso!");
   } catch (error) {
-    console.log("\nErro ao remover produto do estoque.");
+    console.log("\nErro ao remover produto do estoque: ", error.message);
   }
 }
 
@@ -26,25 +26,25 @@ export async function listarProdutos() {
     await estoqueService.listarItens();
     console.log("\nProdutos listados com sucesso!");
   } catch (error) {
-    console.log("\nErro ao listar produtos em estoque.");
+    console.log("\nErro ao listar produtos em estoque: ", error.message);
   }
 }
 
 export async function verValorTotal() {
   try {
-    console.log(await estoqueService.calcularValorTotal());
+    console.log("R$ ", await estoqueService.calcularValorTotal());
     console.log("\nValor total dos produtos em estoque calculado com sucesso.");
   } catch (error) {
-    console.log("\nErro ao calcular valor total do estoque.");
+    console.log("\nErro ao calcular valor total do estoque: ", error.message);
   }
 }
 
 export async function verPesoTotal() {
   try {
-    console.log(await estoqueService.calcularPesoTotal());
+    console.log(await estoqueService.calcularPesoTotal(), "Kg");
     console.log("\nPeso total dos produtos em estoque calculado com sucesso!");
   } catch (error) {
-    console.log("\nErro ao calcular peso total do estoque.");
+    console.log("\nErro ao calcular peso total do estoque: ", error.message);
   }
 }
 
@@ -55,7 +55,10 @@ export async function verMediaValor() {
       "\nMédia total do valor dos produtos em estoque calculado com sucesso!",
     );
   } catch (error) {
-    console.log("\nErro ao calcular média total do valor do estoque.");
+    console.log(
+      "\nErro ao calcular média total do valor do estoque: ",
+      error.message,
+    );
   }
 }
 
@@ -66,17 +69,37 @@ export async function verMediaPeso() {
       "\nMédia total do peso dos produtos em estoque calculado com sucesso!",
     );
   } catch (error) {
-    console.log("\nErro ao calcular média total do peso do estoque.");
+    console.log(
+      "\nErro ao calcular média total do peso do estoque: ",
+      error.message,
+    );
   }
 }
 
-export async function verQuantidadeTotal() {
+export async function verTotalItens() {
   try {
-    console.log(await estoqueService.calcularQuantidadeTotal());
+    console.log(await estoqueService.calcularQuantidadeTotalDeItens());
+    console.log(
+      "\nQuantidade total de itens em estoque calculado com sucesso!",
+    );
+  } catch (error) {
+    console.log(
+      "\nErro ao calcular quantidade total de itens do estoque: ",
+      error.message,
+    );
+  }
+}
+
+export async function verTotalProdutos() {
+  try {
+    await estoqueService.calcularQuantidadeTotalDeProdutos();
     console.log(
       "\nQuantidade total de produtos em estoque calculado com sucesso!",
     );
   } catch (error) {
-    console.log("\nErro ao calcular quantidade total do estoque.");
+    console.log(
+      "\nErro ao calcular quantidade total de produtos do estoque: ",
+      error.message,
+    );
   }
 }

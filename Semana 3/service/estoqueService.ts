@@ -5,6 +5,9 @@ import writeCSV from "../model/writeCSV";
 import { Item } from "../model/interfaceItem";
 import * as fs from "fs";
 
+import * as promptSync from "prompt-sync";
+const prompt = promptSync();
+
 const filePath = "./model/estoque.csv";
 
 class estoqueService {
@@ -16,7 +19,11 @@ class estoqueService {
       isNaN(item.quantidade)
     ) {
       throw new Error(
-        "\nOs tipos das entradas fornecidas não são os esperados.",
+        "\nos tipos das entradas fornecidas não são os esperados.",
+      );
+    } else if (item.peso * 1000 > 99999) {
+      throw new Error(
+        '\no peso dos produtos deve ser infromado em quilogramas, utilizando um ".".',
       );
     } else {
       const csvContent = await readCSV(filePath);
@@ -24,11 +31,17 @@ class estoqueService {
         const header = "nome,peso,valor,quantidade";
         fs.writeFile(filePath, header, (err) => {
           if (err) {
-            console.error("Erro ao escrever no arquivo:", err);
+            console.error("erro ao escrever no arquivo:", err);
           }
         });
         await writeCSV(filePath, [item]);
       } else {
+        for (let i = 0; i < csvContent.length; i++) {
+          if (csvContent[i].nome === item.nome) {
+            throw new Error("\njá existe um produto com esse nome.");
+          }
+        }
+
         const newCSV = await readCSV(filePath);
         newCSV.push(item);
         await writeCSV(filePath, newCSV);
@@ -40,15 +53,28 @@ class estoqueService {
     const csvContent = await readCSV(filePath);
 
     if (csvContent.length == 0) {
-      throw new Error("\nNão há produtos no estoque.");
+      throw new Error("\nnão há produtos no estoque.");
     } else {
       let newCSV: Array<Item> = [];
 
       if (csvContent.length == 0) {
-        throw new Error("\nNão há produtos no estoque.");
+        throw new Error("\nnão há produtos no estoque.");
       } else {
         for (let i = 0; i < csvContent.length; i++) {
-          if (csvContent[i].nome != nomeDoProduto) {
+          if (csvContent[i].nome === nomeDoProduto) {
+            console.log("\nFoi encotrado o seguinte produto com esse nome: ");
+            console.log(csvContent[i]);
+            const resposta = prompt(
+              '\nVocê deseja remover esse produto? Se sim, digite "sim".',
+            );
+            if (resposta.toLowerCase() === "sim") {
+              continue;
+            } else {
+              newCSV.push(csvContent[i]);
+              console.log("\nO produto não foi removido.");
+              continue;
+            }
+          } else {
             newCSV.push(csvContent[i]);
           }
         }
@@ -76,7 +102,7 @@ class estoqueService {
       ) {
         valorTotal += csvContent[i].valor * csvContent[i].quantidade;
       } else {
-        throw new Error("\nValores nulos ou indefinidos.");
+        throw new Error("\nvalores nulos ou indefinidos.");
       }
     }
     return valorTotal;
@@ -94,13 +120,13 @@ class estoqueService {
       ) {
         pesoTotal += csvContent[i].peso * csvContent[i].quantidade;
       } else {
-        throw new Error("\nValores nulos ou indefinidos.");
+        throw new Error("\nvalores nulos ou indefinidos.");
       }
     }
     return pesoTotal;
   }
 
-  static async calcularQuantidadeTotal() {
+  static async calcularQuantidadeTotalDeItens() {
     const csvContent = await readCSV(filePath);
     let quantidadeTotal: number = 0;
     for (let i = 0; i < csvContent.length; i++) {
@@ -108,26 +134,31 @@ class estoqueService {
         csvContent[i].quantidade !== null &&
         csvContent[i].quantidade !== undefined
       ) {
-        quantidadeTotal += csvContent[i].quantidade;
+        quantidadeTotal += csvContent[i].quantidade * 1; //gambiarra
       } else {
-        throw new Error("\nValores nulos ou indefinidos.");
+        throw new Error("\nvalores nulos ou indefinidos.");
       }
     }
     return quantidadeTotal;
   }
 
+  static async calcularQuantidadeTotalDeProdutos() {
+    const csvContent = await readCSV(filePath);
+    console.log(csvContent.length);
+  }
+
   static async calcularMediaValor() {
-    let quantidadeTotal = await this.calcularQuantidadeTotal();
+    let quantidadeTotal = await this.calcularQuantidadeTotalDeItens();
     let valorTotal = await this.calcularValorTotal();
     let mediaValor = valorTotal / quantidadeTotal;
-    console.log(mediaValor);
+    console.log("R$", mediaValor.toFixed(2));
   }
 
   static async calcularMediaPeso() {
-    let quantidadeTotal = await this.calcularQuantidadeTotal();
+    let quantidadeTotal = await this.calcularQuantidadeTotalDeItens();
     let valorPeso = await this.calcularPesoTotal();
     let mediaPeso = valorPeso / quantidadeTotal;
-    console.log(mediaPeso);
+    console.log(mediaPeso.toFixed(2), "Kg");
   }
 }
 

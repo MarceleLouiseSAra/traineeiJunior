@@ -44,21 +44,70 @@ var controleEstoque_5 = require("./controller/controleEstoque");
 var controleEstoque_6 = require("./controller/controleEstoque");
 var controleEstoque_7 = require("./controller/controleEstoque");
 var controleEstoque_8 = require("./controller/controleEstoque");
+var controleEstoque_9 = require("./controller/controleEstoque");
 var promptSync = require("prompt-sync");
 var prompt = promptSync();
 function verificaEntradaAlfabetica() {
-    return;
+    var controle = true;
+    while (true) {
+        var entradaAlfabetica = prompt();
+        if (entradaAlfabetica === null) {
+            console.log("\nEntrada inválida: KeyInterrupt ou entrada null.");
+            continue;
+        }
+        if (/[áéíóúãõâêîôûàèìòù]/i.test(entradaAlfabetica) ||
+            /[a-zA-Z\s]/.test(entradaAlfabetica)) {
+            return entradaAlfabetica;
+        }
+        else {
+            for (var i = 0; i < entradaAlfabetica.length; i++) {
+                var caractere = entradaAlfabetica[i];
+                if (!/[áéíóúãõâêîôûàèìòù]/i.test(caractere) ||
+                    !/[a-zA-Z\s]/.test(caractere)) {
+                    console.log("\nEntrada inválida: forneça uma nova entrada.");
+                    controle = false;
+                    break;
+                }
+            }
+        }
+        if (controle) {
+            return entradaAlfabetica;
+        }
+        else {
+            continue;
+        }
+    }
 }
 function verificaEntradaNumerica() {
-    return;
+    while (true) {
+        try {
+            var entradaNumerica = parseFloat(prompt());
+            if (entradaNumerica === null) {
+                console.log("\nEntrada inválida: KeyInterrupt ou entrada null.");
+                continue;
+            }
+            if (isNaN(entradaNumerica)) {
+                throw new Error("\nEntrada inválida: é esperada uma entrada do tipo number.");
+            }
+            if (entradaNumerica < 0) {
+                console.log("\nEntrada negativa: forneça uma entrada válida.");
+            }
+            else {
+                return entradaNumerica;
+            }
+        }
+        catch (erro) {
+            console.log("\nO tipo da entrada dada é inesperado: forneça uma entrada válida.");
+        }
+    }
 }
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var modo, _nome, _peso, _valor, _quantidade, item, _nomeDoProduto;
+        var opcao, _nome, _peso, _valor, _quantidade, item, _nomeDoProduto;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!1) return [3 /*break*/, 17];
+                    if (!1) return [3 /*break*/, 19];
                     console.log("\nPara adicionar um produto, digite '1'.");
                     console.log("Para remover um produto, digite '2'.");
                     console.log("Para listar os produtos, digite '3'.");
@@ -66,14 +115,20 @@ function main() {
                     console.log("Para ver o peso total do estoque, digite '5'.");
                     console.log("Para ver a média total do valor dos produtos no estoque, digite '6'.");
                     console.log("Para ver a média total do peso dos produtos no estoque, digite '7'.");
-                    console.log("Para ver a quantidade total de produtos em estoque, digite '8'.");
-                    console.log("Para finalizar, digite '9'.");
-                    modo = prompt("\nDigite o modo desejado: ");
-                    if (!(modo === "1")) return [3 /*break*/, 2];
-                    _nome = prompt("Digite o nome do produto: ");
-                    _peso = Number(prompt("Digite o peso do produto: "));
-                    _valor = Number(prompt("Digite o valor do produto: "));
-                    _quantidade = Number(prompt("Digite a quantidade do produto: "));
+                    console.log("Para ver a quantidade total de itens em estoque, digite '8'.");
+                    console.log("Para ver a quantidade total de produtos em estoque, digite '9'.");
+                    console.log("Para finalizar, digite '0'.");
+                    console.log("\nDigite a opção desejada: ");
+                    opcao = verificaEntradaNumerica();
+                    if (!(opcao === 1)) return [3 /*break*/, 2];
+                    console.log("Digite o nome do produto: ");
+                    _nome = verificaEntradaAlfabetica();
+                    console.log("Digite o peso do produto: ");
+                    _peso = verificaEntradaNumerica();
+                    console.log("Digite o valor do produto: ");
+                    _valor = verificaEntradaNumerica();
+                    console.log("Digite a quantidade do produto: ");
+                    _quantidade = verificaEntradaNumerica();
                     item = {
                         nome: _nome,
                         peso: _peso,
@@ -85,54 +140,61 @@ function main() {
                     _a.sent();
                     _a.label = 2;
                 case 2:
-                    if (!(modo == "2")) return [3 /*break*/, 4];
-                    _nomeDoProduto = prompt("Digite o nome do produto que desejas remover do estoque: ");
+                    if (!(opcao === 2)) return [3 /*break*/, 4];
+                    console.log("Digite o nome do produto que desejas remover do estoque: ");
+                    _nomeDoProduto = verificaEntradaAlfabetica();
                     return [4 /*yield*/, (0, controleEstoque_2.removerProduto)(_nomeDoProduto)];
                 case 3:
                     _a.sent();
                     _a.label = 4;
                 case 4:
-                    if (!(modo == "3")) return [3 /*break*/, 6];
+                    if (!(opcao === 3)) return [3 /*break*/, 6];
                     return [4 /*yield*/, (0, controleEstoque_3.listarProdutos)()];
                 case 5:
                     _a.sent();
                     _a.label = 6;
                 case 6:
-                    if (!(modo == "4")) return [3 /*break*/, 8];
+                    if (!(opcao === 4)) return [3 /*break*/, 8];
                     return [4 /*yield*/, (0, controleEstoque_4.verValorTotal)()];
                 case 7:
                     _a.sent();
                     _a.label = 8;
                 case 8:
-                    if (!(modo == "5")) return [3 /*break*/, 10];
+                    if (!(opcao === 5)) return [3 /*break*/, 10];
                     return [4 /*yield*/, (0, controleEstoque_5.verPesoTotal)()];
                 case 9:
                     _a.sent();
                     _a.label = 10;
                 case 10:
-                    if (!(modo == "6")) return [3 /*break*/, 12];
+                    if (!(opcao === 6)) return [3 /*break*/, 12];
                     return [4 /*yield*/, (0, controleEstoque_6.verMediaValor)()];
                 case 11:
                     _a.sent();
                     _a.label = 12;
                 case 12:
-                    if (!(modo == "7")) return [3 /*break*/, 14];
+                    if (!(opcao === 7)) return [3 /*break*/, 14];
                     return [4 /*yield*/, (0, controleEstoque_7.verMediaPeso)()];
                 case 13:
                     _a.sent();
                     _a.label = 14;
                 case 14:
-                    if (!(modo == "8")) return [3 /*break*/, 16];
-                    return [4 /*yield*/, (0, controleEstoque_8.verQuantidadeTotal)()];
+                    if (!(opcao === 8)) return [3 /*break*/, 16];
+                    return [4 /*yield*/, (0, controleEstoque_8.verTotalItens)()];
                 case 15:
                     _a.sent();
                     _a.label = 16;
                 case 16:
-                    if (modo == "9") {
-                        return [3 /*break*/, 17];
+                    if (!(opcao === 9)) return [3 /*break*/, 18];
+                    return [4 /*yield*/, (0, controleEstoque_9.verTotalProdutos)()];
+                case 17:
+                    _a.sent();
+                    _a.label = 18;
+                case 18:
+                    if (opcao === 0) {
+                        return [3 /*break*/, 19];
                     }
                     return [3 /*break*/, 0];
-                case 17: return [2 /*return*/];
+                case 19: return [2 /*return*/];
             }
         });
     });

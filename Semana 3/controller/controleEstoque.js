@@ -44,7 +44,8 @@ exports.verValorTotal = verValorTotal;
 exports.verPesoTotal = verPesoTotal;
 exports.verMediaValor = verMediaValor;
 exports.verMediaPeso = verMediaPeso;
-exports.verQuantidadeTotal = verQuantidadeTotal;
+exports.verTotalItens = verTotalItens;
+exports.verTotalProdutos = verTotalProdutos;
 var estoqueService_1 = require("../service/estoqueService");
 function adicionarProduto(item) {
     return __awaiter(this, void 0, void 0, function () {
@@ -60,7 +61,7 @@ function adicionarProduto(item) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
-                    console.log("\nErro ao adicionar produto ao estoque.");
+                    console.log("\nErro ao adicionar produto ao estoque: ", error_1.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -81,7 +82,7 @@ function removerProduto(nomeDoProduto) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_2 = _a.sent();
-                    console.log("\nErro ao remover produto do estoque.");
+                    console.log("\nErro ao remover produto do estoque: ", error_2.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -102,7 +103,7 @@ function listarProdutos() {
                     return [3 /*break*/, 3];
                 case 2:
                     error_3 = _a.sent();
-                    console.log("\nErro ao listar produtos em estoque.");
+                    console.log("\nErro ao listar produtos em estoque: ", error_3.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -111,20 +112,21 @@ function listarProdutos() {
 }
 function verValorTotal() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, error_4;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _a, _b, _c, error_4;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
-                    _c.trys.push([0, 2, , 3]);
+                    _d.trys.push([0, 2, , 3]);
                     _b = (_a = console).log;
+                    _c = ["R$ "];
                     return [4 /*yield*/, estoqueService_1.default.calcularValorTotal()];
                 case 1:
-                    _b.apply(_a, [_c.sent()]);
+                    _b.apply(_a, _c.concat([_d.sent()]));
                     console.log("\nValor total dos produtos em estoque calculado com sucesso.");
                     return [3 /*break*/, 3];
                 case 2:
-                    error_4 = _c.sent();
-                    console.log("\nErro ao calcular valor total do estoque.");
+                    error_4 = _d.sent();
+                    console.log("\nErro ao calcular valor total do estoque: ", error_4.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -141,12 +143,12 @@ function verPesoTotal() {
                     _b = (_a = console).log;
                     return [4 /*yield*/, estoqueService_1.default.calcularPesoTotal()];
                 case 1:
-                    _b.apply(_a, [_c.sent()]);
+                    _b.apply(_a, [_c.sent(), "Kg"]);
                     console.log("\nPeso total dos produtos em estoque calculado com sucesso!");
                     return [3 /*break*/, 3];
                 case 2:
                     error_5 = _c.sent();
-                    console.log("\nErro ao calcular peso total do estoque.");
+                    console.log("\nErro ao calcular peso total do estoque: ", error_5.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -167,7 +169,7 @@ function verMediaValor() {
                     return [3 /*break*/, 3];
                 case 2:
                     error_6 = _a.sent();
-                    console.log("\nErro ao calcular média total do valor do estoque.");
+                    console.log("\nErro ao calcular média total do valor do estoque: ", error_6.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -188,14 +190,14 @@ function verMediaPeso() {
                     return [3 /*break*/, 3];
                 case 2:
                     error_7 = _a.sent();
-                    console.log("\nErro ao calcular média total do peso do estoque.");
+                    console.log("\nErro ao calcular média total do peso do estoque: ", error_7.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     });
 }
-function verQuantidadeTotal() {
+function verTotalItens() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _b, error_8;
         return __generator(this, function (_c) {
@@ -203,14 +205,35 @@ function verQuantidadeTotal() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = console).log;
-                    return [4 /*yield*/, estoqueService_1.default.calcularQuantidadeTotal()];
+                    return [4 /*yield*/, estoqueService_1.default.calcularQuantidadeTotalDeItens()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
-                    console.log("\nQuantidade total de produtos em estoque calculado com sucesso!");
+                    console.log("\nQuantidade total de itens em estoque calculado com sucesso!");
                     return [3 /*break*/, 3];
                 case 2:
                     error_8 = _c.sent();
-                    console.log("\nErro ao calcular quantidade total do estoque.");
+                    console.log("\nErro ao calcular quantidade total de itens do estoque: ", error_8.message);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+function verTotalProdutos() {
+    return __awaiter(this, void 0, void 0, function () {
+        var error_9;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, estoqueService_1.default.calcularQuantidadeTotalDeProdutos()];
+                case 1:
+                    _a.sent();
+                    console.log("\nQuantidade total de produtos em estoque calculado com sucesso!");
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_9 = _a.sent();
+                    console.log("\nErro ao calcular quantidade total de produtos do estoque: ", error_9.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

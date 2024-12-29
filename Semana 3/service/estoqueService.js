@@ -40,13 +40,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var readCSV_1 = require("../model/readCSV");
 var writeCSV_1 = require("../model/writeCSV");
 var fs = require("fs");
+var promptSync = require("prompt-sync");
+var prompt = promptSync();
 var filePath = "./model/estoque.csv";
 var estoqueService = /** @class */ (function () {
     function estoqueService() {
     }
     estoqueService.criarItem = function (item) {
         return __awaiter(this, void 0, void 0, function () {
-            var csvContent, header, newCSV;
+            var csvContent, header, i, newCSV;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -54,52 +56,74 @@ var estoqueService = /** @class */ (function () {
                             isNaN(item.peso) ||
                             isNaN(item.valor) ||
                             isNaN(item.quantidade))) return [3 /*break*/, 1];
-                        throw new Error("\nOs tipos das entradas fornecidas não são os esperados.");
-                    case 1: return [4 /*yield*/, (0, readCSV_1.default)(filePath)];
-                    case 2:
+                        throw new Error("\nos tipos das entradas fornecidas não são os esperados.");
+                    case 1:
+                        if (!(item.peso * 1000 > 99999)) return [3 /*break*/, 2];
+                        throw new Error('\no peso dos produtos deve ser infromado em quilogramas, utilizando um ".".');
+                    case 2: return [4 /*yield*/, (0, readCSV_1.default)(filePath)];
+                    case 3:
                         csvContent = _a.sent();
-                        if (!(csvContent.length == 0)) return [3 /*break*/, 4];
+                        if (!(csvContent.length == 0)) return [3 /*break*/, 5];
                         header = "nome,peso,valor,quantidade";
                         fs.writeFile(filePath, header, function (err) {
                             if (err) {
-                                console.error("Erro ao escrever no arquivo:", err);
+                                console.error("erro ao escrever no arquivo:", err);
                             }
                         });
                         return [4 /*yield*/, (0, writeCSV_1.default)(filePath, [item])];
-                    case 3:
+                    case 4:
                         _a.sent();
-                        return [3 /*break*/, 7];
-                    case 4: return [4 /*yield*/, (0, readCSV_1.default)(filePath)];
+                        return [3 /*break*/, 8];
                     case 5:
+                        for (i = 0; i < csvContent.length; i++) {
+                            if (csvContent[i].nome === item.nome) {
+                                throw new Error("\njá existe um produto com esse nome.");
+                            }
+                        }
+                        return [4 /*yield*/, (0, readCSV_1.default)(filePath)];
+                    case 6:
                         newCSV = _a.sent();
                         newCSV.push(item);
                         return [4 /*yield*/, (0, writeCSV_1.default)(filePath, newCSV)];
-                    case 6:
+                    case 7:
                         _a.sent();
-                        _a.label = 7;
-                    case 7: return [2 /*return*/];
+                        _a.label = 8;
+                    case 8: return [2 /*return*/];
                 }
             });
         });
     };
     estoqueService.removerItem = function (nomeDoProduto) {
         return __awaiter(this, void 0, void 0, function () {
-            var csvContent, newCSV, i;
+            var csvContent, newCSV, i, resposta;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, (0, readCSV_1.default)(filePath)];
                     case 1:
                         csvContent = _a.sent();
                         if (!(csvContent.length == 0)) return [3 /*break*/, 2];
-                        throw new Error("\nNão há produtos no estoque.");
+                        throw new Error("\nnão há produtos no estoque.");
                     case 2:
                         newCSV = [];
                         if (csvContent.length == 0) {
-                            throw new Error("\nNão há produtos no estoque.");
+                            throw new Error("\nnão há produtos no estoque.");
                         }
                         else {
                             for (i = 0; i < csvContent.length; i++) {
-                                if (csvContent[i].nome != nomeDoProduto) {
+                                if (csvContent[i].nome === nomeDoProduto) {
+                                    console.log("\nFoi encotrado o seguinte produto com esse nome: ");
+                                    console.log(csvContent[i]);
+                                    resposta = prompt('\nVocê deseja remover esse produto? Se sim, digite "sim".');
+                                    if (resposta.toLowerCase() === "sim") {
+                                        continue;
+                                    }
+                                    else {
+                                        newCSV.push(csvContent[i]);
+                                        console.log("\nO produto não foi removido.");
+                                        continue;
+                                    }
+                                }
+                                else {
                                     newCSV.push(csvContent[i]);
                                 }
                             }
@@ -146,7 +170,7 @@ var estoqueService = /** @class */ (function () {
                                 valorTotal += csvContent[i].valor * csvContent[i].quantidade;
                             }
                             else {
-                                throw new Error("\nValores nulos ou indefinidos.");
+                                throw new Error("\nvalores nulos ou indefinidos.");
                             }
                         }
                         return [2 /*return*/, valorTotal];
@@ -171,7 +195,7 @@ var estoqueService = /** @class */ (function () {
                                 pesoTotal += csvContent[i].peso * csvContent[i].quantidade;
                             }
                             else {
-                                throw new Error("\nValores nulos ou indefinidos.");
+                                throw new Error("\nvalores nulos ou indefinidos.");
                             }
                         }
                         return [2 /*return*/, pesoTotal];
@@ -179,7 +203,7 @@ var estoqueService = /** @class */ (function () {
             });
         });
     };
-    estoqueService.calcularQuantidadeTotal = function () {
+    estoqueService.calcularQuantidadeTotalDeItens = function () {
         return __awaiter(this, void 0, void 0, function () {
             var csvContent, quantidadeTotal, i;
             return __generator(this, function (_a) {
@@ -191,13 +215,27 @@ var estoqueService = /** @class */ (function () {
                         for (i = 0; i < csvContent.length; i++) {
                             if (csvContent[i].quantidade !== null &&
                                 csvContent[i].quantidade !== undefined) {
-                                quantidadeTotal += csvContent[i].quantidade;
+                                quantidadeTotal += csvContent[i].quantidade * 1; //gambiarra
                             }
                             else {
-                                throw new Error("\nValores nulos ou indefinidos.");
+                                throw new Error("\nvalores nulos ou indefinidos.");
                             }
                         }
                         return [2 /*return*/, quantidadeTotal];
+                }
+            });
+        });
+    };
+    estoqueService.calcularQuantidadeTotalDeProdutos = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var csvContent;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, (0, readCSV_1.default)(filePath)];
+                    case 1:
+                        csvContent = _a.sent();
+                        console.log(csvContent.length);
+                        return [2 /*return*/];
                 }
             });
         });
@@ -207,14 +245,14 @@ var estoqueService = /** @class */ (function () {
             var quantidadeTotal, valorTotal, mediaValor;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.calcularQuantidadeTotal()];
+                    case 0: return [4 /*yield*/, this.calcularQuantidadeTotalDeItens()];
                     case 1:
                         quantidadeTotal = _a.sent();
                         return [4 /*yield*/, this.calcularValorTotal()];
                     case 2:
                         valorTotal = _a.sent();
                         mediaValor = valorTotal / quantidadeTotal;
-                        console.log(mediaValor);
+                        console.log("R$", mediaValor.toFixed(2));
                         return [2 /*return*/];
                 }
             });
@@ -225,14 +263,14 @@ var estoqueService = /** @class */ (function () {
             var quantidadeTotal, valorPeso, mediaPeso;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.calcularQuantidadeTotal()];
+                    case 0: return [4 /*yield*/, this.calcularQuantidadeTotalDeItens()];
                     case 1:
                         quantidadeTotal = _a.sent();
                         return [4 /*yield*/, this.calcularPesoTotal()];
                     case 2:
                         valorPeso = _a.sent();
                         mediaPeso = valorPeso / quantidadeTotal;
-                        console.log(mediaPeso);
+                        console.log(mediaPeso.toFixed(2), "Kg");
                         return [2 /*return*/];
                 }
             });
