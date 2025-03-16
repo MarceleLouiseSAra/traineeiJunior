@@ -25,9 +25,6 @@ npm i
 
 npm install typescript -D
 
-npm tsc --init
-# Cria arquivo de configuração tsconfig.json
-
 npm run start
 # Executa o script "start" em package.json
 ```
