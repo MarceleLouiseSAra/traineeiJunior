@@ -11,7 +11,7 @@ function nome(texto) {
 
 // texto = "tchubirau"
 
-import prompt from 'prompt-sync';
+const prompt = require("prompt-sync")();
 
 // texto = prompt("Digite algo: ");
 // console.log(nome(texto));
