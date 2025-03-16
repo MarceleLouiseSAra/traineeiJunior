@@ -21,10 +21,7 @@ npx jest
 digite, no terminal, os comandos:
 
 ```bash
-npm install node
-
-npm init -y
-# Cria a pasta node-modules e os arquivos package.json e package-lock.json.
+npm i
 
 npm install typescript -D
 
