@@ -2,9 +2,22 @@
 
 ## Modo de uso
 
-Digite, no terminal, os comandos:
+### Para as Semanas 1 e 2, 
+digite, no terminal, os comandos:
 
 ```bash
+npm i
+
+node semana_.js
+# _ (underline) deve ser substituído pelo número da semana
+```
+
+### Para a Semana 3, 
+digite, no terminal, os comandos:
+
+```bash
+npm install node
+
 npm init -y
 # Cria a pasta node-modules e os arquivos package.json e package-lock.json.
 
