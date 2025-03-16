@@ -23,8 +23,6 @@ digite, no terminal, os comandos:
 ```bash
 npm i
 
-npm install typescript -D
-
 npm run start
 # Executa o script "start" em package.json
 ```
