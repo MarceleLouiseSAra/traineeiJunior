@@ -9,7 +9,7 @@ digite, no terminal, os comandos:
 npm i
 
 node semana_.js
-# _ (underline) deve ser substituído pelo número da semana
+# "_" (underline) deve ser substituído pelo número da semana
 ```
 
 ```bash
